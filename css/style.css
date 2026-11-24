@@ -20,8 +20,6 @@ h1{font-size:clamp(24px,4vw,32px);line-height:1.25;margin:0;text-wrap:balance}
 header.pg{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 24px;margin-bottom:20px}
 .tally{display:flex;gap:20px;color:var(--mut);font-size:13px}
 .tally b{display:block;font-size:26px;font-weight:300;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
-.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;align-items:center}
-.bar label{font-size:13px;color:var(--mut)}
 select,button{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 14px;cursor:pointer}
 select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 .go{background:var(--rose);color:#1a0f1f;border-color:var(--rose);font-weight:700}
@@ -81,8 +79,140 @@ td:first-child{font-weight:700;white-space:nowrap;color:var(--ink)}
 .foot nav{display:flex;flex-wrap:wrap;gap:4px 16px}
 .foot a{color:var(--mut);padding:8px 0;display:inline-block}
 @media(max-width:600px){
- .row{grid-template-columns:6.5em minmax(0,1fr) 4em}.tally{gap:14px}
+ .tally{gap:14px}
  table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}
  .stack td{border:0;padding:2px 0;white-space:normal}
 }
+/* ---------- トップ（メニュー） ---------- */
+.tally b small{font-size:.55em;color:var(--mut)}
+.intro{color:#eadff0;margin:0 0 18px;max-width:46em}
+.entries{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}
+.entries>.card{grid-column:1/-1}
+.loading{padding:40px 0}
+.entry{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px}
+.entry h2{display:flex;align-items:center;gap:10px;margin:0;font-size:18px;line-height:1.4}
+.entry .no{flex:none;width:26px;height:26px;border-radius:50%;background:var(--rose);color:#1a0f1f;display:grid;place-items:center;font-size:14px;font-weight:700}
+.entry p{margin:0;color:var(--mut);font-size:14px;line-height:1.7;flex:1}
+.entry p b{color:var(--ink)}
+.entry .go,.entry .btns{align-self:stretch}
+.btns{display:flex;flex-wrap:wrap;gap:8px}.btns button{flex:1 1 8em}
+.fbtns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fbtns button{display:grid;place-items:center;gap:0;padding:6px 4px;min-height:58px;line-height:1.35;font-size:14px}
+.fbtns small{font-size:12px;color:var(--mut)}
+.fbtns .weak{border-color:var(--rose)}.fbtns .weak small{color:var(--rose)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px;margin-top:12px}
+.pick-card{--pad:18px;border-radius:16px}
+.pick-card h2{font-size:17px;margin:0 0 6px}
+.pick-card .hint{margin:0 0 10px}
+.field{display:grid;gap:2px}
+.field label{font-size:13px;color:var(--mut)}
+.field select{width:100%}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pick-card .acts{margin-top:12px;justify-content:flex-start}
+.notice{margin:14px 0 0}
+/* ---------- 問題カード ---------- */
+.card{--pad:clamp(18px,3.5vw,36px);padding:var(--pad)}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-6px 0 10px}
+.back{background:transparent;font-size:14px;padding:0 12px;color:var(--mut)}
+.pos{font-size:14px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pos b{font-size:20px;color:var(--ink);font-weight:500}
+.qcard .prog{margin-bottom:12px}
+.qcard .meta{margin-bottom:16px}
+.q{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
+.leadq{background:var(--deep);border:1px solid var(--line);border-left:3px solid var(--dusk);border-radius:0 10px 10px 0;padding:14px 16px;margin:0 0 18px;font-size:16px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;color:#eadff0}
+.ch{gap:12px}
+.ch button{font-size:17px;line-height:1.7;padding:13px 16px;min-height:56px}
+.ch .t{white-space:pre-wrap;overflow-wrap:anywhere;padding-top:1px}
+.ch .k{margin-top:1px}
+.src{font-size:12px;color:var(--mut);margin:14px 0 0}
+.src.mod{margin-top:2px}
+.qfig{margin:0 0 20px}
+.qfig figure{margin:0}
+.zoom{display:block;width:100%;padding:0;border:0;background:transparent;min-height:0;border-radius:10px;cursor:zoom-in}
+.qimg{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:8px;background:#fff}
+.qfig figcaption{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.5}
+.qfig .tap{margin-left:.8em;white-space:nowrap}
+details.qfig summary{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:14px;color:var(--mut)}
+details.qfig summary:focus-visible,.missd summary:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+details.qfig[open] summary{margin-bottom:10px}
+.exp{line-height:1.85}
+.exp .note{color:#ffe27a;margin-bottom:8px}
+.exp p+p{margin-top:8px}
+/* 回答ボタン列：画面下に固定して親指で押しやすく */
+.qbar{position:sticky;bottom:0;z-index:5;display:flex;gap:8px;align-items:center;margin:18px calc(-1*var(--pad)) calc(-1*var(--pad));padding:10px var(--pad) max(10px,env(safe-area-inset-bottom));background:rgba(36,22,41,.97);border-top:1px solid var(--line);border-radius:0 0 18px 18px}
+.qbar .nx{margin-left:auto;min-width:9.5em}
+.qbar button{padding:0 14px}
+.kbd{margin:14px 0 0}
+body.quizzing .tools-fab{display:none}
+/* 結果 */
+.verdict.ok{color:var(--ok)}.verdict.ng{color:var(--rose)}
+.row{grid-template-columns:8.5em minmax(0,1fr) 7.5em}
+.row small{color:var(--mut);font-size:12px}
+.row.total{font-weight:700}
+.m.line30,.m.line60{position:relative;overflow:visible}
+.m.line30 i,.m.line60 i{border-radius:6px}
+.m.line30::after,.m.line60::after{content:"";position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.7}
+.m.line30::after{left:30%}.m.line60::after{left:60%}
+.missd{margin:0 0 20px}
+.missd summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font-weight:700;font-size:17px}
+.missd .miss{margin-top:8px}
+/* 画像の拡大表示 */
+.lb{padding:0;border:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:#0d0710;color:var(--ink)}
+.lb::backdrop{background:rgba(0,0,0,.8)}
+.lb-bar{position:sticky;top:0;display:flex;gap:8px;justify-content:flex-end;padding:8px 12px;background:#0d0710;border-bottom:1px solid var(--line)}
+.lb-body{height:calc(100% - 62px);overflow:auto;padding:12px;display:grid;place-items:center}
+.lb-body img{display:block;width:100%;max-width:1200px;height:auto;background:#fff;border-radius:6px}
+.lb.full .lb-body{place-items:start}
+.lb.full .lb-body img{width:auto;max-width:none}
+/* 問題ごとのメモ */
+.qmemo{margin-top:16px;display:grid;gap:6px}
+.qmemo label{font-size:13px;color:var(--mut)}
+textarea{font:inherit;font-size:16px;line-height:1.6;color:var(--ink);background:var(--deep);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;resize:vertical}
+textarea:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.resets{margin:8px 0}
+/* 電卓・メモのパネル */
+.tools-fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:30;min-height:48px;padding:0 18px;border-radius:999px;background:var(--card);border-color:var(--dusk);box-shadow:0 6px 20px rgba(0,0,0,.45);font-weight:700}
+.tools-fab[aria-expanded=true]{background:var(--rose);color:#1a0f1f;border-color:var(--rose)}
+.tbtn[aria-expanded=true]{border-color:var(--rose);color:var(--rose)}
+.tools-panel{position:fixed;right:16px;bottom:84px;z-index:31;width:min(360px,calc(100vw - 32px));max-height:calc(100vh - 100px);overflow:auto;background:var(--card);border:1px solid var(--dusk);border-radius:16px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.55)}
+.tools-panel:focus{outline:none}
+.tools-head{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tabs{display:flex;gap:4px}
+.tabs button{padding:0 10px;font-size:14px;background:transparent;border-color:transparent;color:var(--mut)}
+.tabs button[aria-selected=true]{background:var(--deep);border-color:var(--line);color:var(--ink);font-weight:700}
+.tools-x{width:44px;padding:0;font-size:20px;background:transparent}
+.calc-disp{background:var(--deep);border:1px solid var(--line);border-radius:10px;padding:8px 12px;text-align:right;margin-bottom:8px;overflow:hidden}
+.calc-ex{font-size:14px;color:var(--mut);min-height:1.5em;word-break:break-all}
+.calc-res{display:block;font-size:26px;line-height:1.3;font-variant-numeric:tabular-nums;word-break:break-all}
+.calc-keys{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.calc-keys button{padding:0;min-height:44px;font-size:18px;background:var(--deep)}
+.calc-keys .op{color:var(--rose)}
+.calc-keys .fn{color:var(--ok);font-size:16px}
+.calc-keys .eq{grid-column:1/-1;background:var(--rose);color:#1a0f1f;font-size:20px}
+.tools-panel .hint{margin:8px 0 0;line-height:1.5}
+.tp textarea{margin-top:6px}
+.mlist{list-style:none;padding:0;margin:0 0 8px;display:grid;gap:8px}
+.mlist li{display:grid;gap:2px;padding:8px 12px;background:var(--deep);border-left:3px solid var(--dusk);border-radius:0 8px 8px 0;font-size:14px}
+.mlist .hint{margin:0}
+.mq{color:var(--mut);font-size:13px}
+.mt{white-space:pre-wrap;word-break:break-word}
+body.tools-open .wrap{padding-bottom:120px}
+@media(max-width:600px){
+ .tools-panel{left:0;right:0;bottom:0;width:auto;max-height:62vh;border-radius:16px 16px 0 0;border-bottom:0;padding:10px 12px max(12px,env(safe-area-inset-bottom))}
+ body.tools-open .tools-fab{display:none}
+ body.tools-open .wrap{padding-bottom:64vh}
+ .calc-res{font-size:22px}
+ .kbd-hint,.kbd{display:none}
+ .fields{grid-template-columns:1fr 1fr}
+ .row{grid-template-columns:7.2em minmax(0,1fr) 6em;gap:8px;font-size:13.5px}.row small{font-size:11px}
+ .ch button{font-size:16px;padding:12px 14px}
+ .fbtns button{font-size:12.5px;padding:6px 2px}
+ .btns button{padding:0 8px;font-size:15px}
+ .tools-fab{display:none}
+ .qbar{gap:6px}.qbar button{padding:0 12px}.qbar .nx{min-width:0;flex:1 1 auto}
+ .qfig .tap{display:block;margin-left:0}
+}
 @media(prefers-reduced-motion:reduce){.prog i,.m i{transition:none}}
+.missd summary{list-style:none}.missd summary::-webkit-details-marker{display:none}
+.missd summary::before{content:"▸";margin-right:8px;color:var(--mut)}.missd[open] summary::before{content:"▾"}
