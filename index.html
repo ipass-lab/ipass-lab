@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>ITパスポート練習問題ラボ｜ITパスポートの無料練習問題150問</title>
-<meta name="description" content="ITパスポート試験の無料練習問題サイト。ストラテジ・マネジメント・テクノロジの3分野150問、全問解説付き。間違えた問題に付箋を貼って解き直せます。">
-<meta property="og:title" content="ITパスポート練習問題ラボ｜ITパスポートの無料練習問題150問">
-<meta property="og:description" content="ITパスポート試験の無料練習問題サイト。ストラテジ・マネジメント・テクノロジの3分野150問、全問解説付き。間違えた問題に付箋を貼って解き直せます。">
+<title>ITパスポート練習問題ラボ｜ITパスポート過去問を無料で演習（平成28年度春期〜令和8年度の6回分・600問）</title>
+<meta name="description" content="ITパスポート試験の過去問（IPA公開問題、平成28年度春期〜令和8年度の6回分・600問）を無料で演習。回ごとの本番形式とランダム演習、分野別の正答率と合格基準の判定、付箋での復習、電卓・メモ機能付き。">
+<meta property="og:title" content="ITパスポート練習問題ラボ｜ITパスポート過去問を無料で演習（平成28年度春期〜令和8年度の6回分・600問）">
+<meta property="og:description" content="ITパスポート試験の過去問（IPA公開問題、平成28年度春期〜令和8年度の6回分・600問）を無料で演習。回ごとの本番形式とランダム演習、分野別の正答率と合格基準の判定、付箋での復習、電卓・メモ機能付き。">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
@@ -16,22 +16,37 @@
 <body>
 <div class="top"><div class="in"><a class="logo" href="index.html">ITパスポート練習問題ラボ</a><nav class="nav" aria-label="メニュー"><a href="index.html" aria-current="page">演習</a><a href="strategy.html">ストラテジ系</a><a href="management.html">マネジメント系</a><a href="technology.html">テクノロジ系</a></nav></div></div>
 <main class="wrap">
-<header class="pg"><h1>ITパスポート 練習問題</h1><div class="tally" id="tally"></div></header>
-<div class="bar">
-  <label for="fField">分野</label>
-  <select id="fField"><option value="all">全分野</option><option value="S">ストラテジ系</option><option value="M">マネジメント系</option><option value="T">テクノロジ系</option></select>
-  <label for="fMode">出題</label>
-  <select id="fMode"><option value="all">すべて</option><option value="sticky">付箋の問題</option><option value="wrong">前回間違えた問題</option><option value="new">未回答の問題</option></select>
-  <label for="fCount">問題数</label>
-  <select id="fCount"><option>10</option><option>20</option><option value="999">全部</option></select>
-  <button type="button" class="go" id="start">この条件で始める</button>
+<header class="pg" id="homeTop"><h1>ITパスポート 過去問演習</h1><div class="tally" id="tally" aria-live="polite"></div></header>
+<div id="home">
+<p class="intro">IPAが公開しているITパスポート試験の過去問題を、本番形式やランダム演習で解けます。分野別の正答率と付箋で、苦手を効率よく復習できます。</p>
+<div class="entries" id="entries"><div class="card empty loading" role="status">過去問データを読み込んでいます…</div></div>
+<div class="pick">
+ <section class="card pick-card" aria-labelledby="hExam"><h2 id="hExam">回を選んで本番形式</h2>
+  <p class="hint">問1から順番に解きます。途中でやめても、このブラウザに保存され続きから再開できます。最後に分野別の得点と合格基準の判定を表示します。</p>
+  <div class="field"><label for="fExam">回</label><select id="fExam" data-needs-data disabled><option>読み込み中…</option></select></div>
+  <p id="examStat" class="hint" role="status"></p>
+  <div class="acts"><button type="button" class="go" id="examGo" data-needs-data disabled>この回を解く</button><button type="button" id="examNew" hidden>最初から解き直す</button></div>
+ </section>
+ <section class="card pick-card" aria-labelledby="hRand"><h2 id="hRand">条件を選んでランダム演習</h2>
+  <div class="fields">
+   <div class="field"><label for="fYear">回</label><select id="fYear" data-needs-data disabled><option value="all">全回</option></select></div>
+   <div class="field"><label for="fField">分野</label><select id="fField"><option value="all">全分野</option><option value="S">ストラテジ系</option><option value="M">マネジメント系</option><option value="T">テクノロジ系</option></select></div>
+   <div class="field"><label for="fMode">絞り込み</label><select id="fMode"><option value="all">すべて</option><option value="sticky">付箋の問題</option><option value="wrong">前回間違えた問題</option><option value="new">未回答の問題</option></select></div>
+   <div class="field"><label for="fCount">問題数</label><select id="fCount"><option>10</option><option>20</option><option>50</option><option value="999">全部</option></select></div>
+  </div>
+  <div class="acts"><button type="button" class="go" id="start" data-needs-data disabled>この条件で始める</button></div>
+ </section>
 </div>
-<div id="main"><noscript><div class="card empty">このページの問題を解くにはJavaScriptを有効にしてください。</div></noscript></div>
+<p class="hint notice">過去問はIPA公開のITパスポート試験 公開問題です（著作権はIPA）。Web表示のため、表や図の文章化など一部を改変しています。</p>
+</div>
+<div id="main" hidden data-src="js/kakomon.js?v=c2a5f3b24a"></div>
+<noscript><div class="card empty">このページの問題を解くにはJavaScriptを有効にしてください。</div></noscript>
 
 <section class="art">
 <h2>このサイトについて</h2>
-<p>ITパスポート試験の合格をめざす人のための、無料の練習問題サイトです。ストラテジ系・マネジメント系・テクノロジ系の3分野から、オリジナルの四肢択一問題を150問掲載しています。すべての問題に解説が付いているので、答え合わせをしながら用語の意味や計算の手順を確認できます。</p>
-<p>間違えた問題には「付箋」を貼っておき、あとで付箋の問題だけを解き直せます。結果画面では分野ごとの正答率が分かるので、苦手な分野を見つけて重点的に復習しましょう。分野ごとの重要用語は、上のメニューの各分野ページにまとめています。</p>
+<p>ITパスポート試験の合格をめざす人のための、無料の過去問演習サイトです。IPA（独立行政法人情報処理推進機構）が公開しているITパスポート試験の公開問題（<span data-kcount>平成28年度春期〜令和8年度の6回分・600問</span>）を、ストラテジ系・マネジメント系・テクノロジ系の分野別に解けます。</p>
+<p>「本番形式」では、回を1つ選んで問1から順番に解き、最後に分野別の得点と合格基準（総合60%以上かつ各分野30%以上）を満たしているかを確認できます。途中で中断しても、続きから再開できます。「ランダム演習」では、全回・分野を混ぜて出題します。</p>
+<p>間違えた問題には「付箋」を貼っておき、あとで付箋の問題や前回間違えた問題だけを解き直せます。問題を解く画面の「電卓・メモ」からは、計算問題に使える電卓と、計算の途中経過などを書けるメモ帳を開けます。答えたあとは、解説の下にその問題専用のメモを残せます。分野ごとの重要用語は、上のメニューの各分野ページにまとめています。</p>
 
 <h2>ITパスポート試験の概要</h2>
 <div class="facts">
@@ -45,18 +60,21 @@
 
 <h2>効率のよい使い方</h2>
 <ol>
-<li>まず「全分野・10問」で解いて、今の実力をつかむ。</li>
-<li>間違えた問題は解説を読み、必要なら「付箋を貼る」。</li>
-<li>正答率が低い分野は、分野別の用語解説ページを読んでから、その分野だけ出題して解き直す。</li>
-<li>試験直前は「付箋の問題」と「前回間違えた問題」を繰り返す。</li>
+<li>まず「最新回で腕試し」で1回分を本番形式で解き、今の実力と分野別の得点をつかむ。</li>
+<li>間違えた問題は解説を読み、必要なら「付箋」を貼る。</li>
+<li>正答率が低い分野は、分野別の用語解説ページを読んでから「苦手分野を集中演習」で解き直す。</li>
+<li>試験直前は「付箋」と「前回間違えた」問題を繰り返す。</li>
 </ol>
-<p class="hint">掲載している問題はすべて当サイトのオリジナルで、IPAが公開している過去問題をそのまま掲載したものではありません。成績と付箋はお使いのブラウザの中だけに保存され、外部には送信されません。</p>
-<p><button type="button" id="reset">このブラウザの成績と付箋をすべて削除</button> <span id="rmsg" class="hint" role="status"></span></p>
+<h2>過去問題の出典と著作権</h2>
+<p>「過去問」は、独立行政法人情報処理推進機構（IPA）が公開しているITパスポート試験の公開問題を、問題ごとに出典を明記して掲載しています。過去問題の著作権はIPAに帰属します。Webで解きやすくするため、表や図を文章で表した箇所など、一部の表記を改変しています（改変した問題には、その旨を表示しています）。原文はIPAが公開している問題冊子（PDF）で確認できます。解説と用語解説は当サイトが独自に作成したものです。当サイトはIPAとは関係のない個人が運営する非公式の学習サイトで、IPAによる承認・監修は受けていません。</p>
+<h2>学習記録の削除</h2>
+<p class="hint">成績・付箋・本番形式の途中経過・メモは、お使いのブラウザの中だけに保存され、外部には送信されません。「成績・付箋・途中経過」の削除ではメモは消えません。メモを消すときは「メモをすべて削除」を使ってください。</p>
+<p class="resets"><button type="button" id="reset">このブラウザの成績・付箋・途中経過をすべて削除</button> <span id="rmsg" class="hint" role="status"></span></p>
+<p class="resets"><button type="button" id="resetMemo">このブラウザのメモをすべて削除</button> <span id="rmsg2" class="hint" role="status"></span></p>
 </section>
 </main>
-<footer class="foot"><div class="in"><span>© ラボ管理人 ／ 最終更新 2026年11月24日</span>
+<footer class="foot"><div class="in"><span>© ラボ管理人（過去問題の著作権は独立行政法人情報処理推進機構に帰属します） ／ 最終更新 2026年11月24日</span>
 <nav aria-label="サイト情報"><a href="about.html">運営者情報</a><a href="privacy.html">プライバシーポリシー</a><a href="contact.html">お問い合わせ</a></nav></div></footer>
-<script src="js/questions.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
