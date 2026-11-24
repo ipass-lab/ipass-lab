@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>テクノロジ系の重要用語まとめ｜ITパスポート練習問題ラボ</title>
+<meta name="description" content="ITパスポート試験のテクノロジ系（コンピュータ・ネットワーク・セキュリティの重要用語）を分かりやすくまとめた解説ページ。">
+<meta property="og:title" content="テクノロジ系の重要用語まとめ｜ITパスポート練習問題ラボ">
+<meta property="og:description" content="ITパスポート試験のテクノロジ系（コンピュータ・ネットワーク・セキュリティの重要用語）を分かりやすくまとめた解説ページ。">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="top"><div class="in"><a class="logo" href="index.html">ITパスポート練習問題ラボ</a><nav class="nav" aria-label="メニュー"><a href="index.html">演習</a><a href="strategy.html">ストラテジ系</a><a href="management.html">マネジメント系</a><a href="technology.html" aria-current="page">テクノロジ系</a></nav></div></div>
+<main class="wrap art">
+<h1>テクノロジ系の重要用語まとめ</h1>
+<p class="lead">テクノロジ系は、コンピュータの仕組み、ネットワーク、データベース、情報セキュリティなどを問う分野で、100問中45問程度と最も多く出題されます。2進数や稼働率などの計算問題と、セキュリティの用語問題は毎回のように出るので、優先して押さえましょう。</p>
+<ul class="toc"><li><a href="#sec1">基礎理論</a></li><li><a href="#sec2">コンピュータシステム</a></li><li><a href="#sec3">ネットワーク</a></li><li><a href="#sec4">情報セキュリティ</a></li><li><a href="#sec5">データベース</a></li></ul>
+<h2 id="sec1">基礎理論</h2>
+<table class="stack"><thead><tr><th>用語</th><th>ポイント</th></tr></thead><tbody><tr><td>2進数・16進数</td><td>2進数1011は8＋2＋1＝11。16進数ではA〜Fが10〜15を表し、1Fは16＋15＝31。</td></tr><tr><td>ビットとバイト</td><td>1バイト＝8ビット。nビットで2のn乗通りを表せる（8ビットで256通り）。</td></tr><tr><td>論理演算</td><td>AND（両方1で1）、OR（どちらか1で1）、XOR（異なるときだけ1）、NOT（反転）。</td></tr><tr><td>スタックとキュー</td><td>スタックは後入れ先出し（LIFO）、キューは先入れ先出し（FIFO）。</td></tr><tr><td>機械学習</td><td>正解付きのデータで学ぶ教師あり学習、正解なしで構造を見つける教師なし学習、報酬で学ぶ強化学習がある。</td></tr></tbody></table><h2 id="sec2">コンピュータシステム</h2>
+<table class="stack"><thead><tr><th>用語</th><th>ポイント</th></tr></thead><tbody><tr><td>キャッシュメモリ</td><td>CPUと主記憶の速度差を埋める高速なメモリ。</td></tr><tr><td>揮発性メモリ</td><td>電源を切ると内容が消える。主記憶に使うDRAMなど。フラッシュメモリは不揮発性。</td></tr><tr><td>RAID</td><td>RAID0は分散して高速化（冗長性なし）、RAID1は同じデータを2台に書くミラーリング、RAID5はパリティを分散して記録する。</td></tr><tr><td>稼働率</td><td>MTBF÷(MTBF＋MTTR)。直列はかけ算、並列は1−(1−稼働率)×(1−稼働率)。</td></tr><tr><td>OSS</td><td>ソースコードが公開され、改変や再配布ができるソフトウェア。Linuxなど。</td></tr></tbody></table><h2 id="sec3">ネットワーク</h2>
+<table class="stack"><thead><tr><th>用語</th><th>ポイント</th></tr></thead><tbody><tr><td>IPアドレス</td><td>IPv4は32ビット、IPv6は128ビット。</td></tr><tr><td>DNS／DHCP／NAT</td><td>DNSはドメイン名とIPアドレスの対応付け、DHCPはIPアドレスの自動割当、NATはプライベートとグローバルのアドレス変換。</td></tr><tr><td>メールのプロトコル</td><td>SMTPは送信・転送、POP3は受信（端末にダウンロード）、IMAPはサーバ上で管理。</td></tr><tr><td>HTTPS</td><td>TLSで通信を暗号化したHTTP。</td></tr><tr><td>LPWA・5G</td><td>LPWAは省電力・広範囲のIoT向け通信。5Gは高速大容量・低遅延・多数同時接続。</td></tr><tr><td>転送時間</td><td>データ量（バイトは×8でビットに）÷（回線速度×伝送効率）で求める。</td></tr></tbody></table><h2 id="sec4">情報セキュリティ</h2>
+<table class="stack"><thead><tr><th>用語</th><th>ポイント</th></tr></thead><tbody><tr><td>機密性・完全性・可用性</td><td>情報セキュリティの3要素（CIA）。可用性は必要なときに使えること。</td></tr><tr><td>共通鍵暗号</td><td>暗号化と復号に同じ鍵を使う。速いが鍵の受け渡しが課題。</td></tr><tr><td>公開鍵暗号</td><td>受信者の公開鍵で暗号化し、受信者の秘密鍵で復号する。</td></tr><tr><td>デジタル署名</td><td>送信者の秘密鍵で署名し、送信者の公開鍵で検証する。なりすましと改ざんを検知できる。</td></tr><tr><td>多要素認証</td><td>知識・所持・生体のうち異なる要素を組み合わせる認証。</td></tr><tr><td>主な攻撃</td><td>フィッシング、ランサムウェア、SQLインジェクション、DDoS攻撃、パスワードリスト攻撃、ゼロデイ攻撃など。</td></tr><tr><td>ファイアウォールとDMZ</td><td>ファイアウォールで通信を制限し、外部公開サーバはDMZに置く。</td></tr></tbody></table><h2 id="sec5">データベース</h2>
+<table class="stack"><thead><tr><th>用語</th><th>ポイント</th></tr></thead><tbody><tr><td>主キーと外部キー</td><td>主キーは行を一意に識別する（重複・空は不可）。外部キーは他の表の主キーを参照する。</td></tr><tr><td>正規化</td><td>データの重複をなくし、更新時の矛盾を防ぐために表を分割する。</td></tr><tr><td>SQL</td><td>SELECT（抽出）、INSERT（追加）、UPDATE（更新）、DELETE（削除）。</td></tr><tr><td>排他制御</td><td>同時更新による矛盾を防ぐため、処理中のデータをロックする。</td></tr></tbody></table>
+<div class="cta"><span>用語を確認したら、テクノロジ系の問題で理解度をチェックしましょう。</span><a href="index.html?field=T">テクノロジ系の問題を解く</a></div>
+</main>
+<footer class="foot"><div class="in"><span>© ラボ管理人 ／ 最終更新 2026年11月24日</span>
+<nav aria-label="サイト情報"><a href="about.html">運営者情報</a><a href="privacy.html">プライバシーポリシー</a><a href="contact.html">お問い合わせ</a></nav></div></footer>
+</body>
+</html>

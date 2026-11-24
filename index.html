@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>ITパスポート練習問題ラボ｜ITパスポートの無料練習問題150問</title>
+<meta name="description" content="ITパスポート試験の無料練習問題サイト。ストラテジ・マネジメント・テクノロジの3分野150問、全問解説付き。間違えた問題に付箋を貼って解き直せます。">
+<meta property="og:title" content="ITパスポート練習問題ラボ｜ITパスポートの無料練習問題150問">
+<meta property="og:description" content="ITパスポート試験の無料練習問題サイト。ストラテジ・マネジメント・テクノロジの3分野150問、全問解説付き。間違えた問題に付箋を貼って解き直せます。">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="top"><div class="in"><a class="logo" href="index.html">ITパスポート練習問題ラボ</a><nav class="nav" aria-label="メニュー"><a href="index.html" aria-current="page">演習</a><a href="strategy.html">ストラテジ系</a><a href="management.html">マネジメント系</a><a href="technology.html">テクノロジ系</a></nav></div></div>
+<main class="wrap">
+<header class="pg"><h1>ITパスポート 練習問題</h1><div class="tally" id="tally"></div></header>
+<div class="bar">
+  <label for="fField">分野</label>
+  <select id="fField"><option value="all">全分野</option><option value="S">ストラテジ系</option><option value="M">マネジメント系</option><option value="T">テクノロジ系</option></select>
+  <label for="fMode">出題</label>
+  <select id="fMode"><option value="all">すべて</option><option value="sticky">付箋の問題</option><option value="wrong">前回間違えた問題</option><option value="new">未回答の問題</option></select>
+  <label for="fCount">問題数</label>
+  <select id="fCount"><option>10</option><option>20</option><option value="999">全部</option></select>
+  <button type="button" class="go" id="start">この条件で始める</button>
+</div>
+<div id="main"><noscript><div class="card empty">このページの問題を解くにはJavaScriptを有効にしてください。</div></noscript></div>
+
+<section class="art">
+<h2>このサイトについて</h2>
+<p>ITパスポート試験の合格をめざす人のための、無料の練習問題サイトです。ストラテジ系・マネジメント系・テクノロジ系の3分野から、オリジナルの四肢択一問題を150問掲載しています。すべての問題に解説が付いているので、答え合わせをしながら用語の意味や計算の手順を確認できます。</p>
+<p>間違えた問題には「付箋」を貼っておき、あとで付箋の問題だけを解き直せます。結果画面では分野ごとの正答率が分かるので、苦手な分野を見つけて重点的に復習しましょう。分野ごとの重要用語は、上のメニューの各分野ページにまとめています。</p>
+
+<h2>ITパスポート試験の概要</h2>
+<div class="facts">
+<div><b>120分</b>試験時間</div>
+<div><b>100問</b>四肢択一式</div>
+<div><b>600点以上</b>総合評価点（1,000点満点）</div>
+<div><b>各300点以上</b>分野別評価点（各1,000点満点）</div>
+</div>
+<p>出題数の目安は、ストラテジ系35問程度、マネジメント系20問程度、テクノロジ系45問程度です。総合点が600点以上でも、どれか1つの分野が300点に届かないと不合格になるため、苦手な分野を作らないことが大切です。試験はパソコンで解答するCBT方式で、全国の会場で随時受験できます。</p>
+<p>試験制度は2027年度から見直される予定です。受験日や申込方法、最新の出題範囲は、必ず<a href="https://www.ipa.go.jp/shiken/kubun/ip/ip_index.html" rel="noopener">IPA（情報処理推進機構）の公式サイト</a>で確認してください。</p>
+
+<h2>効率のよい使い方</h2>
+<ol>
+<li>まず「全分野・10問」で解いて、今の実力をつかむ。</li>
+<li>間違えた問題は解説を読み、必要なら「付箋を貼る」。</li>
+<li>正答率が低い分野は、分野別の用語解説ページを読んでから、その分野だけ出題して解き直す。</li>
+<li>試験直前は「付箋の問題」と「前回間違えた問題」を繰り返す。</li>
+</ol>
+<p class="hint">掲載している問題はすべて当サイトのオリジナルで、IPAが公開している過去問題をそのまま掲載したものではありません。成績と付箋はお使いのブラウザの中だけに保存され、外部には送信されません。</p>
+<p><button type="button" id="reset">このブラウザの成績と付箋をすべて削除</button> <span id="rmsg" class="hint" role="status"></span></p>
+</section>
+</main>
+<footer class="foot"><div class="in"><span>© ラボ管理人 ／ 最終更新 2026年11月24日</span>
+<nav aria-label="サイト情報"><a href="about.html">運営者情報</a><a href="privacy.html">プライバシーポリシー</a><a href="contact.html">お問い合わせ</a></nav></div></footer>
+<script src="js/questions.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
