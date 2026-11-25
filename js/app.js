@@ -4,7 +4,7 @@
 const F={S:'ストラテジ系',M:'マネジメント系',T:'テクノロジ系'};
 const FK=['S','M','T'];
 const K=['ア','イ','ウ','エ'];
-const KEY='ipass-v1',MKEY='ipass-memo-v1',EKEY='ipass-exam-v1';
+const KEY='ipass-v1',MKEY='ipass-memo-v1',EKEY='ipass-exam-v1',PKEY='ipass-pick-v1';
 const $=id=>document.getElementById(id);
 const main=$('main');
 if(!main)return;
@@ -27,7 +27,7 @@ const save=()=>store(KEY,st),saveEx=()=>store(EKEY,ex),saveMemo=()=>store(MKEY,m
 const rec=id=>st[id]||(st[id]={a:0,c:0,s:false,last:null});
 
 // ---------- 問題データ ----------
-let KQ=[],KY=[],BYID={},YL={},ready=false;
+let KQ=[],KY=[],BYID={},YL={},YN={},ready=false;
 const IMG_RE=/^kakomon\/[a-z0-9]{2,12}\/q\d{3}\.png$/;
 function normalize(){
   KQ=(Array.isArray(window.KQ)?window.KQ:[]).filter(o=>o&&typeof o.id==='string'&&Array.isArray(o.c)&&o.c.length===4&&F[o.f]&&Number.isInteger(o.a)&&o.a>=-1&&o.a<4)
@@ -39,7 +39,7 @@ function normalize(){
   KQ.forEach(q=>{if(!KY.some(k=>k.y===q.y))KY.push({y:q.y,label:q.y})});
   KY=KY.filter(k=>KQ.some(q=>q.y===k.y));
   KY.forEach(k=>{YL[k.y]=k.label});
-  BYID={};KQ.forEach(q=>{BYID[q.id]=q});
+  BYID={};YN={};KQ.forEach(q=>{BYID[q.id]=q;YN[q.y]=(YN[q.y]||0)+1});
 }
 const where=q=>(YL[q.y]||q.y)+(q.n?' 問'+q.n:'');
 const examQs=y=>KQ.filter(q=>q.y===y).sort((a,b)=>a.n-b.n);
@@ -55,7 +55,7 @@ function setView(v){
   document.body.classList.toggle('home',v==='home');
   if(v!=='home'){const top=$('qtop')||main;top.scrollIntoView({block:'start'})}
 }
-function goHome(){flushMemo();sess=null;answered=null;main.innerHTML='';setView('home');renderHome();const h=$('homeTop');if(h)h.scrollIntoView({block:'start'})}
+function goHome(){flushMemo();sess=null;answered=null;main.innerHTML='';setView('home');renderHome();updatePick(false);const h=$('homeTop');if(h)h.scrollIntoView({block:'start'})}
 
 function tally(){
   const t=$('tally');if(!t)return;
@@ -102,9 +102,9 @@ function renderHome(){
   renderExamPick();
 }
 function fillSelects(){
-  const fe=$('fExam'),fy=$('fYear');
+  const fe=$('fExam'),yl=$('yList');
   if(fe)fe.innerHTML=KY.map(k=>`<option value="${esc(k.y)}">${esc(k.label)}</option>`).join('');
-  if(fy)fy.innerHTML='<option value="all">全回</option>'+KY.map(k=>`<option value="${esc(k.y)}">${esc(k.label)}</option>`).join('');
+  if(yl)yl.innerHTML=KY.map(k=>`<label><input type="checkbox" value="${esc(k.y)}"><span>${esc(k.label)}</span><small>${YN[k.y]||0}問</small></label>`).join('');
   document.querySelectorAll('[data-needs-data]').forEach(b=>{b.disabled=!KQ.length});
 }
 let newArmed=false;
@@ -127,11 +127,17 @@ function startExam(y,fresh){
   if(i<0){finishExam();return}
   sess.idx=i;show();
 }
-function startRandom(conf){
-  let pool=KQ.filter(q=>(conf.y==='all'||q.y===conf.y)&&(conf.f==='all'||q.f===conf.f));
+// conf = {ys:[回コード]|null(全回), fs:[分野]|null(全分野), m:絞り込み, n:問題数}
+function poolFor(conf){
+  const ys=conf.ys?new Set(conf.ys):null,fs=conf.fs?new Set(conf.fs):null;
+  let pool=KQ.filter(q=>(!ys||ys.has(q.y))&&(!fs||fs.has(q.f)));
   if(conf.m==='sticky')pool=pool.filter(q=>st[q.id]&&st[q.id].s);
   if(conf.m==='wrong')pool=pool.filter(q=>st[q.id]&&st[q.id].last===false);
   if(conf.m==='new')pool=pool.filter(q=>!st[q.id]||!st[q.id].a);
+  return pool;
+}
+function startRandom(conf){
+  const pool=poolFor(conf);
   const list=shuffle(pool).slice(0,conf.n);
   sess={mode:'random',conf,list,idx:0,log:[]};
   if(!list.length){
@@ -236,7 +242,7 @@ function finishExam(){
   setView('result');widths();
   $('back2').addEventListener('click',goHome);
   $('again').addEventListener('click',()=>startExam(y,true));
-  if(miss.length)$('rw').addEventListener('click',()=>{sess={mode:'random',conf:{y,f:'all',m:'wrong',n:999},list:shuffle(miss.map(l=>l.q)),idx:0,log:[]};show()});
+  if(miss.length)$('rw').addEventListener('click',()=>{sess={mode:'random',conf:{ys:[y],fs:null,m:'wrong',n:999},list:shuffle(miss.map(l=>l.q)),idx:0,log:[]};show()});
   tally();
 }
 function resultRandom(){
@@ -447,6 +453,7 @@ if($('resetMemo'))twoStep($('resetMemo'),$('rmsg2'),'このブラウザのメモ
 if($('reset'))twoStep($('reset'),$('rmsg'),'このブラウザの成績・付箋・途中経過をすべて削除','成績・付箋・途中経過を削除しました（メモは残っています）',()=>{
   st={};ex={p:{},r:{}};try{localStorage.removeItem(KEY);localStorage.removeItem(EKEY)}catch(e){}
   if(view==='home')renderHome();else tally();
+  updatePick(false);
 });
 
 // ---------- キーボード操作（演習） ----------
@@ -465,10 +472,10 @@ if($('entries'))$('entries').addEventListener('click',e=>{
   const b=e.target.closest('button[data-act]');if(!b||!ready)return;
   const a=b.dataset.act;
   if(a==='exam')startExam(b.dataset.y,false);
-  else if(a==='rand')startRandom({y:'all',f:'all',m:'all',n:+b.dataset.n});
-  else if(a==='field')startRandom({y:'all',f:b.dataset.f,m:'all',n:10});
-  else if(a==='sticky')startRandom({y:'all',f:'all',m:'sticky',n:999});
-  else if(a==='wrong')startRandom({y:'all',f:'all',m:'wrong',n:999});
+  else if(a==='rand')startRandom({ys:null,fs:null,m:'all',n:+b.dataset.n});
+  else if(a==='field')startRandom({ys:null,fs:[b.dataset.f],m:'all',n:10});
+  else if(a==='sticky')startRandom({ys:null,fs:null,m:'sticky',n:999});
+  else if(a==='wrong')startRandom({ys:null,fs:null,m:'wrong',n:999});
 });
 if($('fExam'))$('fExam').addEventListener('change',renderExamPick);
 if($('examGo'))$('examGo').addEventListener('click',()=>{if(ready&&$('fExam').value)startExam($('fExam').value,false)});
@@ -477,7 +484,47 @@ if($('examNew'))$('examNew').addEventListener('click',()=>{
   if(!newArmed){newArmed=true;b.textContent='途中経過を消して最初から';return}
   startExam($('fExam').value,true);
 });
-if($('start'))$('start').addEventListener('click',()=>{if(ready)startRandom({y:$('fYear').value,f:$('fField').value,m:$('fMode').value,n:+$('fCount').value})});
+// ---------- ランダム演習の条件（回・分野は複数選択、選択内容はブラウザに記憶） ----------
+const checks=id=>$(id)?[...$(id).querySelectorAll('input[type=checkbox]')]:[];
+function pickConf(){
+  const ys=checks('yList').filter(c=>c.checked).map(c=>c.value),fs=checks('fList').filter(c=>c.checked).map(c=>c.value);
+  return{ys,fs,m:$('fMode').value,n:+$('fCount').value};
+}
+function setPick(p){
+  if(p.ys){const s=new Set(p.ys);checks('yList').forEach(c=>{c.checked=s.has(c.value)})}
+  if(p.fs){const s=new Set(p.fs);checks('fList').forEach(c=>{c.checked=s.has(c.value)})}
+  if(p.m&&$('fMode').querySelector(`option[value="${p.m}"]`))$('fMode').value=p.m;
+  if(p.n&&[...$('fCount').options].some(o=>+o.value===+p.n))$('fCount').value=String(p.n);
+}
+function updatePick(persist){
+  if(!ready||!$('yList'))return;
+  const c=pickConf();
+  if(persist)store(PKEY,c);
+  const nq=c.ys.reduce((n,y)=>n+(YN[y]||0),0);
+  $('ySum').textContent=c.ys.length?(c.ys.length===KY.length?`全${KY.length}回・${nq.toLocaleString()}問`:`${c.ys.length}回・${nq.toLocaleString()}問`):'未選択';
+  const pool=c.ys.length&&c.fs.length?poolFor(c):[];
+  const why=!c.ys.length?'回を1つ以上選んでください。':!c.fs.length?'分野を1つ以上選んでください。':!pool.length?'この条件に当てはまる問題はありません。':'';
+  $('pickCount').textContent=why||`対象 ${pool.length.toLocaleString()}問から ${Math.min(c.n,pool.length).toLocaleString()}問を出題します。`;
+  $('pickCount').classList.toggle('ng',!!why);
+  $('start').disabled=!!why;
+}
+if($('yPick')){
+  $('yPick').querySelector('.yquick').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-q]');if(!b)return;
+    const q=b.dataset.q,cs=checks('yList');
+    cs.forEach((c,i)=>{c.checked=q==='all'?true:q==='none'?false:q==='r'?/^r/.test(c.value):q==='h'?/^h/.test(c.value):i<+q});
+    updatePick(true);
+  });
+  $('yList').addEventListener('change',()=>updatePick(true));
+  $('fList').addEventListener('change',()=>updatePick(true));
+  $('fMode').addEventListener('change',()=>updatePick(true));
+  $('fCount').addEventListener('change',()=>updatePick(true));
+}
+if($('start'))$('start').addEventListener('click',()=>{
+  if(!ready)return;
+  const c=pickConf();if(!c.ys.length||!c.fs.length)return;
+  startRandom({ys:c.ys.length===KY.length?null:c.ys,fs:c.fs.length===3?null:c.fs,m:c.m,n:c.n});
+});
 
 // ---------- データ読み込み ----------
 function init(){
@@ -489,14 +536,20 @@ function init(){
   }
   let started=false;
   // URL からの初期選択（?exam=r08 / ?year=r08 / ?field=S）
+  // ランダム演習の条件：保存した選択 → URL（?year=r08,r07&field=S,M）の順に反映
+  const saved=load(PKEY,null);
+  setPick({ys:KY.map(k=>k.y),fs:FK});
+  if(saved)setPick({ys:Array.isArray(saved.ys)?saved.ys.filter(y=>YL[y]):null,fs:Array.isArray(saved.fs)?saved.fs.filter(f=>F[f]):null,m:saved.m,n:saved.n});
+  if($('yPick'))$('yPick').open=!window.matchMedia('(max-width:600px)').matches;
   try{
     const p=new URLSearchParams(location.search);
-    const y=p.get('year'),f=p.get('field'),e=p.get('exam');
-    if(y&&YL[y])$('fYear').value=y;
-    if(f&&F[f])$('fField').value=f;
+    const list=v=>(v||'').split(',').map(x=>x.trim()).filter(Boolean);
+    const ys=list(p.get('year')).filter(y=>YL[y]),fs=list(p.get('field')).filter(f=>F[f]),e=p.get('exam');
+    if(ys.length||fs.length){setPick({ys:ys.length?ys:null,fs:fs.length?fs:null});updatePick(true)}
     if(e&&YL[e]){$('fExam').value=e;startExam(e,false);started=true}
-    else if(f&&F[f]&&KQ.length){startRandom({y:y&&YL[y]?y:'all',f,m:'all',n:10});started=true}
+    else if(fs.length&&KQ.length){startRandom({ys:ys.length?ys:null,fs,m:'all',n:10});started=true}
   }catch(err){}
+  updatePick(false);
   if(!started){setView('home');renderHome()}else tally();
 }
 function fail(){
