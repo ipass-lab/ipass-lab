@@ -3,7 +3,7 @@
    PICTURE: the live question card itself, at the top under a modest title
    COLOUR and TYPE: plum-black ground, white ink, rose accent, dusk support; system Japanese fonts (no external requests)
    LAYOUT: site bar, settings row, question card; reference pages as calm term tables */
-:root{color-scheme:dark;--bg:#1a0f1f;--card:#241629;--deep:#1f1325;--line:#3a2742;--ink:#fff;--mut:#bfaecb;--rose:#ff8fa3;--dusk:#8f7aa8;--ok:#9ad7ff}
+:root{color-scheme:dark;--bg:#000000;--card:#141414;--deep:#0b0b0b;--line:#2e2e2e;--ink:#fff;--mut:#b8b8b8;--rose:#ff8fa3;--dusk:#8f7aa8;--ok:#9ad7ff}
 *{box-sizing:border-box;min-width:0}
 html{scroll-padding-top:72px}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 system-ui,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;overflow-x:clip}
@@ -22,7 +22,7 @@ header.pg{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-betw
 .tally b{display:block;font-size:26px;font-weight:300;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
 select,button{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 14px;cursor:pointer}
 select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
-.go{background:var(--rose);color:#1a0f1f;border-color:var(--rose);font-weight:700}
+.go{background:var(--rose);color:#000000;border-color:var(--rose);font-weight:700}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3.5vw,36px)}
 .meta{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--mut);margin-bottom:10px}
 .tag{color:var(--rose)}
@@ -31,19 +31,19 @@ select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(
 .q{font-size:clamp(17px,2.2vw,19px);font-weight:500;margin:0 0 22px}
 .ch{display:grid;gap:10px}
 .ch button{display:flex;gap:14px;align-items:flex-start;text-align:start;padding:12px 16px;line-height:1.6;min-height:52px;background:transparent}
-.ch button:hover:not(:disabled){border-color:var(--dusk);background:#2c1c33}
+.ch button:hover:not(:disabled){border-color:var(--dusk);background:#1f1f1f}
 .ch .k{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--dusk);display:grid;place-items:center;font-size:14px}
 .ch button:disabled{cursor:default}
 .ch .right{border-color:var(--ok);background:rgba(154,215,255,.1)}
-.ch .right .k{background:var(--ok);color:#1a0f1f;border-color:var(--ok)}
+.ch .right .k{background:var(--ok);color:#000000;border-color:var(--ok)}
 .ch .wrong{border-color:var(--rose);background:rgba(255,143,163,.1)}
-.ch .wrong .k{background:var(--rose);color:#1a0f1f;border-color:var(--rose)}
+.ch .wrong .k{background:var(--rose);color:#000000;border-color:var(--rose)}
 .exp{margin-top:20px;padding:18px 20px;border-radius:12px;background:var(--deep);border:1px solid var(--line)}
 .exp h3{margin:0 0 6px;font-size:17px}
 .ok{color:var(--ok)}.ng{color:var(--rose)}
-.exp p{margin:0;color:#eadff0}
+.exp p{margin:0;color:#e8e8e8}
 .acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;margin-top:18px}
-.fusen[aria-pressed=true]{background:#ffe27a;color:#1a0f1f;border-color:#ffe27a}
+.fusen[aria-pressed=true]{background:#ffe27a;color:#000000;border-color:#ffe27a}
 .hint{font-size:13px;color:var(--mut)}
 .card .hint{margin:14px 0 0}
 .big{font-size:clamp(56px,12vw,96px);font-weight:200;line-height:1}
@@ -59,10 +59,10 @@ select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(
 .empty{color:var(--mut);text-align:center;padding:30px 0}
 /* reading pages */
 .art h1{margin-bottom:12px}
-.lead{color:#eadff0;font-size:17px;margin:0 0 24px}
+.lead{color:#e8e8e8;font-size:17px;margin:0 0 24px}
 .art h2{font-size:21px;margin:40px 0 12px;padding-top:4px;border-top:1px solid var(--line);padding-top:24px}
 .art h3{font-size:17px;margin:24px 0 8px}
-.art p,.art li{color:#eadff0}
+.art p,.art li{color:#e8e8e8}
 .toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px;padding:0;list-style:none}
 .toc a{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:14px;color:var(--ink)}
 table{width:100%;border-collapse:collapse;margin:8px 0 16px;font-size:15px}
@@ -70,7 +70,7 @@ th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px sol
 th{color:var(--mut);font-weight:500;font-size:13px}
 td:first-child{font-weight:700;white-space:nowrap;color:var(--ink)}
 .cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:32px 0 0;padding:20px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
-.cta a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:10px;background:var(--rose);color:#1a0f1f;font-weight:700;text-decoration:none}
+.cta a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:10px;background:var(--rose);color:#000000;font-weight:700;text-decoration:none}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0 8px}
 .facts div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--mut)}
 .facts b{display:block;font-size:20px;color:var(--ink);font-weight:500}
@@ -85,13 +85,13 @@ td:first-child{font-weight:700;white-space:nowrap;color:var(--ink)}
 }
 /* ---------- トップ（メニュー） ---------- */
 .tally b small{font-size:.55em;color:var(--mut)}
-.intro{color:#eadff0;margin:0 0 18px;max-width:46em}
+.intro{color:#e8e8e8;margin:0 0 18px;max-width:46em}
 .entries{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}
 .entries>.card{grid-column:1/-1}
 .loading{padding:40px 0}
 .entry{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px}
 .entry h2{display:flex;align-items:center;gap:10px;margin:0;font-size:18px;line-height:1.4}
-.entry .no{flex:none;width:26px;height:26px;border-radius:50%;background:var(--rose);color:#1a0f1f;display:grid;place-items:center;font-size:14px;font-weight:700}
+.entry .no{flex:none;width:26px;height:26px;border-radius:50%;background:var(--rose);color:#000000;display:grid;place-items:center;font-size:14px;font-weight:700}
 .entry p{margin:0;color:var(--mut);font-size:14px;line-height:1.7;flex:1}
 .entry p b{color:var(--ink)}
 .entry .go,.entry .btns{align-self:stretch}
@@ -146,7 +146,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .qcard .prog{margin-bottom:12px}
 .qcard .meta{margin-bottom:16px}
 .q{line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
-.leadq{background:var(--deep);border:1px solid var(--line);border-left:3px solid var(--dusk);border-radius:0 10px 10px 0;padding:14px 16px;margin:0 0 18px;font-size:16px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;color:#eadff0}
+.leadq{background:var(--deep);border:1px solid var(--line);border-left:3px solid var(--dusk);border-radius:0 10px 10px 0;padding:14px 16px;margin:0 0 18px;font-size:16px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;color:#e8e8e8}
 .ch{gap:12px}
 .ch button{font-size:17px;line-height:1.7;padding:13px 16px;min-height:56px}
 .ch .t{white-space:pre-wrap;overflow-wrap:anywhere;padding-top:1px}
@@ -184,9 +184,9 @@ body.quizzing .tools-fab{display:none}
 .missd summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font-weight:700;font-size:17px}
 .missd .miss{margin-top:8px}
 /* 画像の拡大表示 */
-.lb{padding:0;border:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:#0d0710;color:var(--ink)}
+.lb{padding:0;border:0;margin:0;width:100vw;height:100dvh;max-width:none;max-height:none;background:#000000;color:var(--ink)}
 .lb::backdrop{background:rgba(0,0,0,.8)}
-.lb-bar{position:sticky;top:0;display:flex;gap:8px;justify-content:flex-end;padding:8px 12px;background:#0d0710;border-bottom:1px solid var(--line)}
+.lb-bar{position:sticky;top:0;display:flex;gap:8px;justify-content:flex-end;padding:8px 12px;background:#000000;border-bottom:1px solid var(--line)}
 .lb-body{height:calc(100% - 62px);overflow:auto;padding:12px;display:grid;place-items:center}
 .lb-body img{display:block;width:100%;max-width:1200px;height:auto;background:#fff;border-radius:6px}
 .lb.full .lb-body{place-items:start}
@@ -199,7 +199,7 @@ textarea:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 .resets{margin:8px 0}
 /* 電卓・メモのパネル */
 .tools-fab{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:30;min-height:48px;padding:0 18px;border-radius:999px;background:var(--card);border-color:var(--dusk);box-shadow:0 6px 20px rgba(0,0,0,.45);font-weight:700}
-.tools-fab[aria-expanded=true]{background:var(--rose);color:#1a0f1f;border-color:var(--rose)}
+.tools-fab[aria-expanded=true]{background:var(--rose);color:#000000;border-color:var(--rose)}
 .tbtn[aria-expanded=true]{border-color:var(--rose);color:var(--rose)}
 .tools-panel{position:fixed;right:16px;bottom:84px;z-index:31;width:min(360px,calc(100vw - 32px));max-height:calc(100vh - 100px);overflow:auto;background:var(--card);border:1px solid var(--dusk);border-radius:16px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.55)}
 .tools-panel:focus{outline:none}
@@ -215,7 +215,7 @@ textarea:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 .calc-keys button{padding:0;min-height:44px;font-size:18px;background:var(--deep)}
 .calc-keys .op{color:var(--rose)}
 .calc-keys .fn{color:var(--ok);font-size:16px}
-.calc-keys .eq{grid-column:1/-1;background:var(--rose);color:#1a0f1f;font-size:20px}
+.calc-keys .eq{grid-column:1/-1;background:var(--rose);color:#000000;font-size:20px}
 .tools-panel .hint{margin:8px 0 0;line-height:1.5}
 .tp textarea{margin-top:6px}
 .mlist{list-style:none;padding:0;margin:0 0 8px;display:grid;gap:8px}
