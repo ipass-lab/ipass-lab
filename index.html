@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>ITパスポート練習問題ラボ｜ITパスポート過去問を無料で演習（平成27年度春期〜令和8年度の13回分・1,300問）</title>
-<meta name="description" content="ITパスポート試験の過去問（IPA公開問題、平成27年度春期〜令和8年度の13回分・1,300問）を無料で演習。回ごとの本番形式とランダム演習、分野別の正答率と合格基準の判定、付箋での復習、電卓・メモ機能付き。">
-<meta property="og:title" content="ITパスポート練習問題ラボ｜ITパスポート過去問を無料で演習（平成27年度春期〜令和8年度の13回分・1,300問）">
-<meta property="og:description" content="ITパスポート試験の過去問（IPA公開問題、平成27年度春期〜令和8年度の13回分・1,300問）を無料で演習。回ごとの本番形式とランダム演習、分野別の正答率と合格基準の判定、付箋での復習、電卓・メモ機能付き。">
+<title>ITパスポート練習問題ラボ｜ITパスポート過去問を無料で演習（平成25年度春期〜令和8年度の21回分・2,100問）</title>
+<meta name="description" content="ITパスポート試験の過去問（IPA公開問題、平成25年度春期〜令和8年度の21回分・2,100問）を無料で演習。回ごとの本番形式とランダム演習、分野別の正答率と合格基準の判定、付箋での復習、電卓・メモ機能付き。">
+<meta property="og:title" content="ITパスポート練習問題ラボ｜ITパスポート過去問を無料で演習（平成25年度春期〜令和8年度の21回分・2,100問）">
+<meta property="og:description" content="ITパスポート試験の過去問（IPA公開問題、平成25年度春期〜令和8年度の21回分・2,100問）を無料で演習。回ごとの本番形式とランダム演習、分野別の正答率と合格基準の判定、付箋での復習、電卓・メモ機能付き。">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="top"><div class="in"><a class="logo" href="index.html">ITパスポート練習問題ラボ</a><nav class="nav" aria-label="メニュー"><a href="index.html" aria-current="page">演習</a><a href="strategy.html">ストラテジ系</a><a href="management.html">マネジメント系</a><a href="technology.html">テクノロジ系</a></nav></div></div>
+<div class="top"><div class="in"><a class="logo" href="index.html">ITパスポート練習問題ラボ</a><nav class="nav" aria-label="メニュー"><a href="index.html" aria-current="page">演習</a><a href="strategy.html">ストラテジ系</a><a href="management.html">マネジメント系</a><a href="technology.html">テクノロジ系</a><a href="terms.html">頻出用語</a></nav></div></div>
 <main class="wrap">
 <header class="pg" id="homeTop"><h1>ITパスポート 過去問演習</h1><div class="tally" id="tally" aria-live="polite"></div></header>
 <div id="home">
@@ -40,6 +40,7 @@
   <fieldset class="fpick"><legend>分野（複数選択可）</legend>
    <div class="chips" id="fList"><label><input type="checkbox" value="S" checked><span>ストラテジ系</span></label><label><input type="checkbox" value="M" checked><span>マネジメント系</span></label><label><input type="checkbox" value="T" checked><span>テクノロジ系</span></label></div>
   </fieldset>
+  <div class="wrow" id="wRow" hidden><label><input type="checkbox" id="fWeight" checked><span>頻出用語を優先して出題<small>過去の試験で何度も出ている用語を含む問題が出やすくなります</small></span></label></div>
   <div class="fields">
    <div class="field"><label for="fMode">絞り込み</label><select id="fMode"><option value="all">すべて</option><option value="sticky">付箋の問題</option><option value="wrong">前回間違えた問題</option><option value="new">未回答の問題</option></select></div>
    <div class="field"><label for="fCount">問題数</label><select id="fCount"><option>10</option><option>20</option><option>50</option><option value="999">全部</option></select></div>
@@ -50,12 +51,12 @@
 </div>
 <p class="hint notice">過去問はIPA公開のITパスポート試験 公開問題です（著作権はIPA）。Web表示のため、表や図の文章化など一部を改変しています。</p>
 </div>
-<div id="main" hidden data-src="js/kakomon.js?v=0ea1385169"></div>
+<div id="main" hidden data-src="js/kakomon.js?v=2af0e7ca3a" data-terms="js/terms.js?v=9f68bc9e0a"></div>
 <noscript><div class="card empty">このページの問題を解くにはJavaScriptを有効にしてください。</div></noscript>
 
 <section class="art">
 <h2>このサイトについて</h2>
-<p>ITパスポート試験の合格をめざす人のための、無料の過去問演習サイトです。IPA（独立行政法人情報処理推進機構）が公開しているITパスポート試験の公開問題（<span data-kcount>平成27年度春期〜令和8年度の13回分・1,300問</span>）を、ストラテジ系・マネジメント系・テクノロジ系の分野別に解けます。</p>
+<p>ITパスポート試験の合格をめざす人のための、無料の過去問演習サイトです。IPA（独立行政法人情報処理推進機構）が公開しているITパスポート試験の公開問題（<span data-kcount>平成25年度春期〜令和8年度の21回分・2,100問</span>）を、ストラテジ系・マネジメント系・テクノロジ系の分野別に解けます。</p>
 <p>「本番形式」では、回を1つ選んで問1から順番に解き、最後に分野別の得点と合格基準（総合60%以上かつ各分野30%以上）を満たしているかを確認できます。途中で中断しても、続きから再開できます。「ランダム演習」では、全回・分野を混ぜて出題します。</p>
 <p>間違えた問題には「付箋」を貼っておき、あとで付箋の問題や前回間違えた問題だけを解き直せます。問題を解く画面の「電卓・メモ」からは、計算問題に使える電卓と、計算の途中経過などを書けるメモ帳を開けます。答えたあとは、解説の下にその問題専用のメモを残せます。分野ごとの重要用語は、上のメニューの各分野ページにまとめています。</p>
 
