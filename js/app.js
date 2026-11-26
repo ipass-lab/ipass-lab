@@ -41,6 +41,26 @@ function normalize(){
   KY.forEach(k=>{YL[k.y]=k.label});
   BYID={};YN={};KQ.forEach(q=>{BYID[q.id]=q;YN[q.y]=(YN[q.y]||0)+1});
 }
+// ---------- 頻出用語（terms.js があれば使う。無くても動く） ----------
+let TERMS=[],TSCORE={},TMAX=0,QTERMS={},TBY={},TN=0;
+function normalizeTerms(){
+  const kt=window.KT;
+  if(!kt||!Array.isArray(kt.terms))return;
+  TERMS=kt.terms.filter(t=>t&&typeof t.t==='string'&&Array.isArray(t.ids)).map(t=>({t:t.t,exams:+t.exams||0,qs:+t.qs||t.ids.length,ids:t.ids.filter(i=>BYID[i])})).filter(t=>t.ids.length);
+  TN=+kt.n_exams||0;
+  TSCORE={};TMAX=0;QTERMS={};TBY={};
+  TERMS.forEach(t=>{TBY[t.t]=new Set(t.ids);t.ids.forEach(i=>{(QTERMS[i]||(QTERMS[i]=[])).push(t)})});
+  const sc=kt.score&&typeof kt.score==='object'?kt.score:{};
+  Object.keys(sc).forEach(i=>{if(BYID[i]){TSCORE[i]=+sc[i]||0;TMAX=Math.max(TMAX,TSCORE[i])}});
+  Object.values(QTERMS).forEach(a=>a.sort((x,y)=>y.exams-x.exams||y.qs-x.qs));
+}
+const hasTerms=()=>TERMS.length>0&&TMAX>0;
+// 頻出スコアに応じた重み：頻出用語を含まない問題を1として、最も頻出の問題で3（他の問題も十分に出る程度）
+const weightOf=q=>1+2*((TSCORE[q.id]||0)/(TMAX||1));
+// 重み付きの非復元抽出（Efraimidis–Spirakis 法：乱数^(1/重み) の大きい順に取る）
+function weightedPick(pool,n){
+  return pool.map(q=>({q,k:Math.pow(Math.random(),1/weightOf(q))})).sort((a,b)=>b.k-a.k).slice(0,n).map(x=>x.q);
+}
 const where=q=>(YL[q.y]||q.y)+(q.n?' 問'+q.n:'');
 const examQs=y=>KQ.filter(q=>q.y===y).sort((a,b)=>a.n-b.n);
 
@@ -98,7 +118,11 @@ function renderHome(){
     <div class="fbtns">${FK.map(k=>`<button type="button" data-act="field" data-f="${k}"${k===weak?' class="weak"':''}><span>${F[k]}</span><small>${fs[k].a?pct(fs[k].c,fs[k].a)+'%':'未回答'}${k===weak?' ・ 苦手':''}</small></button>`).join('')}</div></section>
   <section class="entry"><h2><span class="no">4</span>付箋・間違いの復習</h2>
     <p>付箋を貼った問題と、前回間違えた問題を解き直します。</p>
-    <div class="btns"><button type="button" data-act="sticky"${nSticky?'':' disabled'}>付箋 ${nSticky}問</button><button type="button" data-act="wrong"${nWrong?'':' disabled'}>前回の間違い ${nWrong}問</button></div></section>`;
+    <div class="btns"><button type="button" data-act="sticky"${nSticky?'':' disabled'}>付箋 ${nSticky}問</button><button type="button" data-act="wrong"${nWrong?'':' disabled'}>前回の間違い ${nWrong}問</button></div></section>
+  ${hasTerms()?`<section class="entry entry-wide"><h2><span class="no">5</span>頻出用語で演習</h2>
+    <p>過去${TN||KY.length}回の試験で何度も出ている用語を含む問題を、出やすい順に重み付けして出題します。用語を選ぶと、その用語の問題だけを解けます。</p>
+    <div class="ttags">${TERMS.slice(0,8).map(t=>`<button type="button" class="ttag" data-act="term" data-t="${esc(t.t)}">${esc(t.t)}<small>${t.exams}回</small></button>`).join('')}</div>
+    <div class="btns"><button type="button" class="go" data-act="hot">頻出用語の問題から10問</button><a class="btnlink" href="terms.html">頻出用語ランキングを見る</a></div></section>`:''}`;
   renderExamPick();
 }
 function fillSelects(){
@@ -127,18 +151,21 @@ function startExam(y,fresh){
   if(i<0){finishExam();return}
   sess.idx=i;show();
 }
-// conf = {ys:[回コード]|null(全回), fs:[分野]|null(全分野), m:絞り込み, n:問題数}
+// conf = {ys:[回コード]|null(全回), fs:[分野]|null(全分野), m:絞り込み, n:問題数, w:頻出用語を優先, t:用語, hot:頻出用語を含む問題だけ}
 function poolFor(conf){
   const ys=conf.ys?new Set(conf.ys):null,fs=conf.fs?new Set(conf.fs):null;
-  let pool=KQ.filter(q=>(!ys||ys.has(q.y))&&(!fs||fs.has(q.f)));
+  const ts=conf.t&&TBY[conf.t]?TBY[conf.t]:null;
+  let pool=KQ.filter(q=>(!ys||ys.has(q.y))&&(!fs||fs.has(q.f))&&(!ts||ts.has(q.id)));
+  if(conf.hot)pool=pool.filter(q=>TSCORE[q.id]>0);
   if(conf.m==='sticky')pool=pool.filter(q=>st[q.id]&&st[q.id].s);
   if(conf.m==='wrong')pool=pool.filter(q=>st[q.id]&&st[q.id].last===false);
   if(conf.m==='new')pool=pool.filter(q=>!st[q.id]||!st[q.id].a);
   return pool;
 }
+function startTerm(t){startRandom({ys:null,fs:null,m:'all',n:10,t,w:false})}
 function startRandom(conf){
   const pool=poolFor(conf);
-  const list=shuffle(pool).slice(0,conf.n);
+  const list=conf.w&&hasTerms()?weightedPick(pool,conf.n):shuffle(pool).slice(0,conf.n);
   sess={mode:'random',conf,list,idx:0,log:[]};
   if(!list.length){
     const msg={sticky:'付箋を貼った問題はまだありません。問題画面の「付箋」で追加できます。',wrong:'前回間違えた問題はありません。',new:'この条件の問題はすべて解きました。「すべて」で復習しましょう。'}[conf.m]||'この条件の問題はありません。';
@@ -164,6 +191,7 @@ function show(){
     <div class="qhead"><button type="button" class="back" id="back">${exam?'中断して戻る':'メニューに戻る'}</button>
       <span class="pos">${exam?`<b>問${q.n}</b> / ${total}`:`<b>${sess.idx+1}</b> / ${total}問`}</span></div>
     <div class="prog" role="progressbar" aria-label="進捗" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${done}"><i data-w="${done/total*100}"></i></div>
+    ${sess.conf&&sess.conf.t?`<p class="tline">用語「${esc(sess.conf.t)}」を含む問題</p>`:sess.conf&&sess.conf.hot?'<p class="tline">頻出用語を含む問題</p>':''}
     <div class="meta"><span class="tag">${F[q.f]}</span><span>${esc(where(q))}${r&&r.a?` ・ これまで ${r.c}/${r.a} 正解`:''}</span></div>
     ${q.lead?`<div class="leadq">${esc(q.lead)}</div>`:''}
     ${q.q?`<p class="q">${esc(q.q)}</p>`:''}
@@ -196,9 +224,12 @@ function answer(i){
   $('ch').querySelectorAll('button').forEach((b,j)=>{b.disabled=true;if(free?j===i:j===q.a)b.classList.add('right');else if(j===i)b.classList.add('wrong')});
   const head=free?'○ 正解（この問題はすべての選択肢を正解として扱います）':ok?'○ 正解':'× 不正解 ── 正解は '+K[q.a];
   const body=[q.note?`<p class="note">${esc(q.note)}</p>`:'',q.exp?`<p>${esc(q.exp)}</p>`:(free?'':`<p>正解：${K[q.a]}（解説は準備中です）</p>`)].join('');
-  $('after').innerHTML=`<div class="exp" role="status"><h3 class="${ok?'ok':'ng'}">${head}</h3>${body}</div>
+  const qt=(QTERMS[q.id]||[]).slice(0,8);
+  const tags=qt.length?`<div class="tterms"><span class="hint">この問題の頻出用語（タップでその用語の問題を演習）</span><div class="ttags">${qt.map(t=>`<a class="ttag" href="index.html?term=${encodeURIComponent(t.t)}" data-term="${esc(t.t)}">${esc(t.t)}<small>${t.exams}回</small></a>`).join('')}</div></div>`:'';
+  $('after').innerHTML=`<div class="exp" role="status"><h3 class="${ok?'ok':'ng'}">${head}</h3>${body}</div>${tags}
     <div class="qmemo"><label for="qm">この問題のメモ</label><textarea id="qm" rows="3" maxlength="2000" placeholder="覚えておきたいことを書くと、自動で保存されます"></textarea><span class="hint" id="qms" role="status"></span></div>`;
   bindQMemo(q.id);
+  $('after').querySelectorAll('[data-term]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();flushMemo();startTerm(a.dataset.term)}));
   const nx=$('nx');nx.disabled=false;nx.focus({preventScroll:true});
   tally();
 }
@@ -472,7 +503,9 @@ if($('entries'))$('entries').addEventListener('click',e=>{
   const b=e.target.closest('button[data-act]');if(!b||!ready)return;
   const a=b.dataset.act;
   if(a==='exam')startExam(b.dataset.y,false);
-  else if(a==='rand')startRandom({ys:null,fs:null,m:'all',n:+b.dataset.n});
+  else if(a==='rand')startRandom({ys:null,fs:null,m:'all',n:+b.dataset.n,w:pickW()});
+  else if(a==='hot')startRandom({ys:null,fs:null,m:'all',n:10,w:true,hot:true});
+  else if(a==='term')startTerm(b.dataset.t);
   else if(a==='field')startRandom({ys:null,fs:[b.dataset.f],m:'all',n:10});
   else if(a==='sticky')startRandom({ys:null,fs:null,m:'sticky',n:999});
   else if(a==='wrong')startRandom({ys:null,fs:null,m:'wrong',n:999});
@@ -488,13 +521,15 @@ if($('examNew'))$('examNew').addEventListener('click',()=>{
 const checks=id=>$(id)?[...$(id).querySelectorAll('input[type=checkbox]')]:[];
 function pickConf(){
   const ys=checks('yList').filter(c=>c.checked).map(c=>c.value),fs=checks('fList').filter(c=>c.checked).map(c=>c.value);
-  return{ys,fs,m:$('fMode').value,n:+$('fCount').value};
+  return{ys,fs,m:$('fMode').value,n:+$('fCount').value,w:pickW()};
 }
+function pickW(){const w=$('fWeight');return w?w.checked:true}
 function setPick(p){
   if(p.ys){const s=new Set(p.ys);checks('yList').forEach(c=>{c.checked=s.has(c.value)})}
   if(p.fs){const s=new Set(p.fs);checks('fList').forEach(c=>{c.checked=s.has(c.value)})}
   if(p.m&&$('fMode').querySelector(`option[value="${p.m}"]`))$('fMode').value=p.m;
   if(p.n&&[...$('fCount').options].some(o=>+o.value===+p.n))$('fCount').value=String(p.n);
+  if(typeof p.w==='boolean'&&$('fWeight'))$('fWeight').checked=p.w;
 }
 function updatePick(persist){
   if(!ready||!$('yList'))return;
@@ -504,7 +539,8 @@ function updatePick(persist){
   $('ySum').textContent=c.ys.length?(c.ys.length===KY.length?`全${KY.length}回・${nq.toLocaleString()}問`:`${c.ys.length}回・${nq.toLocaleString()}問`):'未選択';
   const pool=c.ys.length&&c.fs.length?poolFor(c):[];
   const why=!c.ys.length?'回を1つ以上選んでください。':!c.fs.length?'分野を1つ以上選んでください。':!pool.length?'この条件に当てはまる問題はありません。':'';
-  $('pickCount').textContent=why||`対象 ${pool.length.toLocaleString()}問から ${Math.min(c.n,pool.length).toLocaleString()}問を出題します。`;
+  $('pickCount').textContent=why||`対象 ${pool.length.toLocaleString()}問から ${Math.min(c.n,pool.length).toLocaleString()}問を出題します${c.w&&hasTerms()?'（頻出用語を含む問題が出やすくなります）':''}。`;
+  if($('wRow'))$('wRow').hidden=!hasTerms();
   $('pickCount').classList.toggle('ng',!!why);
   $('start').disabled=!!why;
 }
@@ -519,16 +555,17 @@ if($('yPick')){
   $('fList').addEventListener('change',()=>updatePick(true));
   $('fMode').addEventListener('change',()=>updatePick(true));
   $('fCount').addEventListener('change',()=>updatePick(true));
+  if($('fWeight'))$('fWeight').addEventListener('change',()=>updatePick(true));
 }
 if($('start'))$('start').addEventListener('click',()=>{
   if(!ready)return;
   const c=pickConf();if(!c.ys.length||!c.fs.length)return;
-  startRandom({ys:c.ys.length===KY.length?null:c.ys,fs:c.fs.length===3?null:c.fs,m:c.m,n:c.n});
+  startRandom({ys:c.ys.length===KY.length?null:c.ys,fs:c.fs.length===3?null:c.fs,m:c.m,n:c.n,w:c.w});
 });
 
 // ---------- データ読み込み ----------
 function init(){
-  normalize();ready=true;fillSelects();
+  normalize();normalizeTerms();ready=true;fillSelects();
   // トップの件数表記を実データに合わせる（データがそろった回だけ）
   if(KY.length){
     const rng=KY.length===1?KY[0].label:KY[KY.length-1].label+'〜'+KY[0].label;
@@ -539,14 +576,15 @@ function init(){
   // ランダム演習の条件：保存した選択 → URL（?year=r08,r07&field=S,M）の順に反映
   const saved=load(PKEY,null);
   setPick({ys:KY.map(k=>k.y),fs:FK});
-  if(saved)setPick({ys:Array.isArray(saved.ys)?saved.ys.filter(y=>YL[y]):null,fs:Array.isArray(saved.fs)?saved.fs.filter(f=>F[f]):null,m:saved.m,n:saved.n});
+  if(saved)setPick({ys:Array.isArray(saved.ys)?saved.ys.filter(y=>YL[y]):null,fs:Array.isArray(saved.fs)?saved.fs.filter(f=>F[f]):null,m:saved.m,n:saved.n,w:saved.w});
   if($('yPick'))$('yPick').open=!window.matchMedia('(max-width:600px)').matches;
   try{
     const p=new URLSearchParams(location.search);
     const list=v=>(v||'').split(',').map(x=>x.trim()).filter(Boolean);
-    const ys=list(p.get('year')).filter(y=>YL[y]),fs=list(p.get('field')).filter(f=>F[f]),e=p.get('exam');
+    const ys=list(p.get('year')).filter(y=>YL[y]),fs=list(p.get('field')).filter(f=>F[f]),e=p.get('exam'),t=p.get('term');
     if(ys.length||fs.length){setPick({ys:ys.length?ys:null,fs:fs.length?fs:null});updatePick(true)}
     if(e&&YL[e]){$('fExam').value=e;startExam(e,false);started=true}
+    else if(t&&TBY[t]){startTerm(t);started=true}
     else if(fs.length&&KQ.length){startRandom({ys:ys.length?ys:null,fs,m:'all',n:10});started=true}
   }catch(err){}
   updatePick(false);
@@ -556,12 +594,16 @@ function fail(){
   const en=$('entries');
   if(en)en.innerHTML='<div class="card empty" role="alert">過去問データを読み込めませんでした。通信状態を確認して、ページを再読み込みしてください。</div>';
 }
-if(Array.isArray(window.KQ))init();
-else{
-  const s=document.createElement('script');
-  s.src=main.dataset.src||'js/kakomon.js';
-  s.addEventListener('load',()=>{if(Array.isArray(window.KQ))init();else fail()});
-  s.addEventListener('error',fail);
-  document.body.appendChild(s);
+// kakomon.js（必須）と terms.js（任意）を並行して読み込み、両方の結果がそろってから始める
+function loadScript(src){
+  return new Promise(res=>{
+    const s=document.createElement('script');s.src=src;
+    s.addEventListener('load',()=>res(true));s.addEventListener('error',()=>res(false));
+    document.body.appendChild(s);
+  });
 }
+Promise.all([
+  Array.isArray(window.KQ)?Promise.resolve(true):loadScript(main.dataset.src||'js/kakomon.js'),
+  window.KT?Promise.resolve(true):loadScript(main.dataset.terms||'js/terms.js')
+]).then(([ok])=>{if(ok&&Array.isArray(window.KQ))init();else fail()});
 })();
